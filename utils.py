@@ -76,7 +76,7 @@ def fetch_dataset(dataset_name, dev_slice=0.1):
 
 if __name__ == '__main__':
   boston = load_dataset('boston')
-  calif = fetch_dataset('california_housing')
+#  calif = fetch_dataset('california_housing')
   diabt = load_dataset('diabetes')
   bc = load_dataset('breast_cancer')
   
