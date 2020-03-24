@@ -25,12 +25,15 @@ This is the main course repo of "Hands-on Data Science with Microsoft Azure" by 
 * Lecture 5: 12.05 @ 14:00 – 2 hrs
   - Deep Vision basic neural convolutional architectures
   - Pipelines and experiments 
+  
 * Lecture 6: 19.05 @ 14:00 – 2 hrs
   - Sequence modeling architectures
   - Pipelines and experiments 
+  
 * Lecture 7: 26.05 @ 14:00 – 2 hrs
   - Advanced neural architectures
   - Grid-search and Auto-ML
+  
 * Lecture 8: 02.06 @ 14:00 – 2 hrs
   - Azure Deep Learning model training
   - Deep Learning models deployment in various scenarios 
