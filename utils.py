@@ -9,6 +9,7 @@ import numpy as np
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from collections import namedtuple
+import matplotlib.pyplot as plt
 
 #%matplotlib inline
 
@@ -20,6 +21,8 @@ def set_pretty_prints():
   pd.set_option('precision', 4)    
   np.set_printoptions(precision=2)
   np.set_printoptions(suppress=True)
+  plt.style.use('ggplot')
+  return
   
   
   
