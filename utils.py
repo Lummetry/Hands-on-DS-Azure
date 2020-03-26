@@ -26,15 +26,24 @@ def set_pretty_prints():
   
   
   
-def load_dataset(dataset_name, dev_slice=0.1):
+def load_dataset(dataset_name, dev_slice=0.1, normalize=True):
   func_name = 'load_'+dataset_name
   if not hasattr(datasets, func_name):
-    raise ValueError("Unknown dataset '{}'".format(func_name))
+    func_name = 'fetch_'+dataset_name
+    if not hasattr(datasets, func_name):
+      raise ValueError("Unknown dataset '{}'".format(func_name))
   func = getattr(datasets, func_name)
+  print("Using '{}' with normalize={}".format(func.__name__, normalize))
   obj = func()
   df = pd.DataFrame(obj.data, columns=obj.feature_names)
   
-  x_trn, x_ttt, y_trn, y_ttt = train_test_split(obj.data, obj.target, test_size=dev_slice * 2)
+  X = obj.data
+  y = obj.target
+  if normalize:
+    X = (X - X.mean(axis=0)) / X.std(axis=0)
+    
+  
+  x_trn, x_ttt, y_trn, y_ttt = train_test_split(X, y, test_size=dev_slice * 2)
   
   x_dev, x_test, y_dev, y_test = train_test_split(x_ttt, y_ttt, test_size=0.5)
   
@@ -51,30 +60,6 @@ def load_dataset(dataset_name, dev_slice=0.1):
   Dataset = namedtuple('Dataset', list(dct.keys()))
   return Dataset(**dct)
 
-def fetch_dataset(dataset_name, dev_slice=0.1):
-  func_name = 'fetch_'+dataset_name
-  if not hasattr(datasets, func_name):
-    raise ValueError("Unknown dataset '{}'".format(func_name))
-  func = getattr(datasets, func_name)
-  obj = func(data_home='datasets/'+dataset_name)
-  df = pd.DataFrame(obj.data, columns=obj.feature_names)
-  
-  x_trn, x_ttt, y_trn, y_ttt = train_test_split(obj.data, obj.target, test_size=dev_slice * 2)
-  
-  x_dev, x_test, y_dev, y_test = train_test_split(x_ttt, y_ttt, test_size=0.5)
-  
-  dct = {
-      'x_train' : x_trn,
-      'y_train' : y_trn,
-      'x_dev'   : x_dev,
-      'y_dev'   : y_dev,
-      'x_test'  : x_test,
-      'y_test'  : y_test,
-      'df'      : df,
-      'desc'    : obj.DESCR,
-      }
-  Dataset = namedtuple('Dataset', list(dct.keys()))
-  return Dataset(**dct)
   
 
 if __name__ == '__main__':
