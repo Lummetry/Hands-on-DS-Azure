@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 import matplotlib.pyplot as plt
 
 #%matplotlib inline
@@ -33,12 +33,13 @@ def load_dataset(dataset_name, dev_slice=0.1, normalize=True):
     if not hasattr(datasets, func_name):
       raise ValueError("Unknown dataset '{}'".format(func_name))
   func = getattr(datasets, func_name)
-  print("Using '{}' with normalize={}".format(func.__name__, normalize))
+  print("Loading dataset '{}' using '{}' with normalize={}...".format(
+      dataset_name, func.__name__, normalize))
   obj = func()
   df = pd.DataFrame(obj.data, columns=obj.feature_names)
   
-  X = obj.data
-  y = obj.target
+  X = obj.data.astype(np.float32)
+  y = obj.target.reshape((-1,1)).astype(np.float32)
   if normalize:
     X = (X - X.mean(axis=0)) / X.std(axis=0)
     
@@ -47,7 +48,7 @@ def load_dataset(dataset_name, dev_slice=0.1, normalize=True):
   
   x_dev, x_test, y_dev, y_test = train_test_split(x_ttt, y_ttt, test_size=0.5)
   
-  dct = {
+  dct = OrderedDict({
       'x_train' : x_trn,
       'y_train' : y_trn,
       'x_dev'   : x_dev,
@@ -56,15 +57,20 @@ def load_dataset(dataset_name, dev_slice=0.1, normalize=True):
       'y_test'  : y_test,
       'df'      : df,
       'desc'    : obj.DESCR,
-      }
+      })
   Dataset = namedtuple('Dataset', list(dct.keys()))
+  print("Data loaded:")
+  for key in dct:
+    print("  {:<10} {}".format(
+        key,
+        dct[key].shape if type(dct[key]) in [np.ndarray, pd.DataFrame] else '"'+dct[key][:100].replace('\n','')+'"'))
   return Dataset(**dct)
 
   
 
 if __name__ == '__main__':
   boston = load_dataset('boston')
-#  calif = fetch_dataset('california_housing')
+  calif = load_dataset('california_housing')
   diabt = load_dataset('diabetes')
   bc = load_dataset('breast_cancer')
   
