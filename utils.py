@@ -49,6 +49,8 @@ def load_dataset(dataset_name, dev_slice=0.1, normalize=True):
   x_dev, x_test, y_dev, y_test = train_test_split(x_ttt, y_ttt, test_size=0.5)
   
   dct = OrderedDict({
+      'x_full'  : X,
+      'y_full'  : y,
       'x_train' : x_trn,
       'y_train' : y_trn,
       'x_dev'   : x_dev,
