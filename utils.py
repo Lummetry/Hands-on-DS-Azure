@@ -71,6 +71,7 @@ def load_dataset(dataset_name, dev_slice=0.1, normalize=True):
   
 
 if __name__ == '__main__':
+  pass
 #  boston = load_dataset('boston')
 #  calif = load_dataset('california_housing')
 #  diabt = load_dataset('diabetes')
